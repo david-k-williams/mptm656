@@ -1,0 +1,48 @@
+@startuml
+'C4 templates
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Dynamic.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Deployment.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+'include legend
+LAYOUT_WITH_LEGEND()
+
+'show person as an outline and not a block
+SHOW_PERSON_OUTLINE()
+
+'define title
+title Component diagram for Mobile Banking Application - Account Transfer Flow
+ 
+'person
+Person(mobileBankingCustomer,"Online Banking Customer", "Customer")
+
+'components
+Container(ma, "Mobile App", "flutter", "Provides banking functionality to service account through a mobile application written in Flutter giving a similar experience on Android and iOS", flutter)
+System_Ext(okta, "Okta", "Identity provider and authorization server")
+Container_Boundary(azure,"Azure Clound Tenant", "Production Instance", azure){
+    Container(apiGateway, "API Gateway", "Azure API Management", "Leveraging the API gateway functionality of the Azure API Management product, the gateway acts a centralized proxy for all internal and external API integrations")
+    Container_Boundary(serverlessPlatform, "Serverless Platform (Azure Functions)", "Serverless platform to host functions with endpoints exposed as REST APIs"){
+        Component(microserviceUpdate, "Audit Banking Transactions", "Microservice")
+    }
+    ContainerDb(cosmosDb, "Audit Database", "Cosmos DB", "Audit database of transactions for banking money movement. Syncs with Banking Core and Payments Platform.")
+}
+System_Ext(bankingCore, "Banking Core System", "OpenAPI banking core system to manage transactions, transfers, and ledger information for banking users.")
+
+'relationships that are indexed for auto numbering
+RelIndex_R(Index(), mobileBankingCustomer, ma, "User enters username and password.")
+RelIndex_U(Index(), ma, okta, "Identity provider validates user via OAuth2 flow.")
+RelIndex_D(Index(), okta, ma, "Identity provider returns access token.")
+RelIndex_L(Index(), ma, mobileBankingCustomer, "User is authenticated.")
+RelIndex_R(Index(), mobileBankingCustomer, ma, "User requests transfer of $1,000 from Checking Account to Savings Account")
+RelIndex_R(Index(), ma, apiGateway, "API request to initiate account transfer", "HTTP /POST")
+RelIndex_D(Index(), apiGateway, microserviceUpdate, "Routes request to backend microservice", "HTTP /POST")
+RelIndex_L(Index(), bankingCore, apiGateway, "Returns success message with latest balances", "201 Accepted")
+RelIndex_R(Index(), apiGateway, bankingCore, "Routes HTTP /POST request to update balance in banking core")
+RelIndex_D(Index(), microserviceUpdate,cosmosDb, "Update transaction and balance information")
+RelIndex_L(Index(), apiGateway, ma, "Return success message with latest balances", "201 Accepted")
+RelIndex_R(Index(), ma, apiGateway, "API request to get latest balance", "HTTP /GET")
+RelIndex_L(Index(), ma, mobileBankingCustomer, "Message showing transfer is complete with latest balences")
+@enduml

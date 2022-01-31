@@ -1,0 +1,16 @@
+'include sprites
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/Azure-PlantUML/release/2-1/dist/AzureCommon.puml
+!define AzurePuml https://raw.githubusercontent.com/plantuml-stdlib/Azure-PlantUML/master/dist
+!includeurl AzurePuml/AzureCommon.puml
+!includeurl AzurePuml/AzureC4Integration.puml
+!includeurl AzurePuml/Databases/AzureRedisCache.puml
+!includeurl AzurePuml/Databases/AzureCosmosDb.puml
+!includeurl AzurePuml/Databases/AzureSqlDatabase.puml
+!includeurl AzurePuml/Web/AzureWebApp.puml
+!includeurl AzurePuml/Web/AzureCDN.puml
+!includeurl AzurePuml/Web/AzureSearch.puml
+!includeurl AzurePuml/Storage/AzureBlobStorage.puml
+!includeurl AzurePuml/Storage/AzureQueueStorage.puml
+!includeurl AzurePuml/AzureRaw.puml
+!includeurl AzurePuml/Databases/AzureCosmosDb.puml
+!includeurl AzurePuml/Compute/AzureFunction.puml

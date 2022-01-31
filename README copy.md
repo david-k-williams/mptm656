@@ -14,4 +14,4 @@ The user is authenticated to access the mobile application through integration w
 - OpenAPI Banking is leveraged with an API first Banking-Core-as-a-Service solution
 ### Component Diagram for Mobile Banking Application - Account Transfer Flow
 ![Alt text](exports\png\module-3-diagram.png)
-=======
+

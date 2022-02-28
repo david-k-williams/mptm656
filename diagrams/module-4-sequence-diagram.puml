@@ -1,0 +1,7 @@
+@startuml
+
+autonumber
+Customer -> "Mobile Application" : Login
+"Mobile Application" -> "Member Profile API" : Calls Member Profile API to get member details
+"Member Profile API" -> "Member Database" : Get member details from database
+@enduml

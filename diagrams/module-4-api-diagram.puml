@@ -1,0 +1,38 @@
+@startuml
+'C4 templates
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Dynamic.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Deployment.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+'sprites
+!define AzurePuml https://raw.githubusercontent.com/plantuml-stdlib/Azure-PlantUML/master/dist
+!include AzurePuml/AzureCommon.puml
+!include AzurePuml/Databases/AzureCosmosDb.puml
+!include AzurePuml/Compute/AzureFunction.puml
+
+'show person as an outline and not a block
+SHOW_PERSON_OUTLINE()
+
+'define style
+AddElementTag("personTag", $bgColor="IndianRed", $fontColor="black", $borderColor="IndianRed",$legendText="Customer (End-User)")
+AddElementTag("azureComponent", $bgColor="teal", $borderColor="teal", $fontColor="white", $legendText="Azure Component")
+AddElementTag("vendorApplication", $bgColor="grey", $borderColor="grey", $fontColor="white", $legendText="External Vendor Application")
+AddElementTag("endUserDevice", $bgColor="black", $borderColor="black",$fontColor="white", $legendText="End User Device (Phone)")
+AddRelTag("in", $textColor="green", $lineColor="green", $legendText="Egress Transactions (Input Flow from User)")
+AddRelTag("out", $textColor="red", $lineColor="red", $legendText="Ingress Transactions (System Output Flow to User)")
+AddRelTag("internal", $textColor="black", $lineColor="black", $legendText="Internal Processing (No User Impact)")
+
+
+Deployment_Node_L(apiOne, "API One", "Vendor API"){
+
+Deployment_Node_L(apiOneInput, "Input") {
+        AddProperty("input", "value")
+        AddProperty("id","1")
+    }
+
+}
+
+@enduml

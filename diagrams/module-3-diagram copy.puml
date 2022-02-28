@@ -32,6 +32,16 @@ AddRelTag("internal", $textColor="black", $lineColor="black", $legendText="Inter
 Person(mobileBankingCustomer,"Online Banking Customer", "Customer", $tags="personTag")
 
 'components
+
+Deployment_Node_L(apiOne, "input values"){
+    AddProperty("id","1")
+}
+
+Deployment_Node(apiTwo, "input values"){
+    AddProperty("id","1")
+}
+
+Deployment_Node_L(apiInput, "API Input")
 Container(ma, "Mobile App", "Flutter", "Provides banking functionality to service account through a mobile application written in Flutter giving a similar experience on Android and iOS", $tags="endUserDevice")
 
 Component(okta, "Identity Provider" , "Okta", "Identity provider and authorization server", $tags="vendorApplication")
@@ -47,18 +57,17 @@ Deployment_Node_L(azure,"Clound Tenant", "Azure"){
 Component(bankingCore, "Banking Core System", "SaaS", "OpenAPI banking core system to manage transactions, transfers, and ledger information for banking users.", $tags="vendorApplication")
 
 'relationships that are indexed for auto numbering
-RelIndex_R(Index(), mobileBankingCustomer, ma, "User enters username and password.", $tags="in")
+RelIndex_R(Index(), mobileBankingCustomer, ma, "User enters username and password.", $tags="in") 
 RelIndex_U(Index(), ma, okta, "Identity provider validates user via OAuth2 flow.", $tags="in")
 RelIndex_D(Index(), okta, ma, "Identity provider returns access token.", $tags='out')
 RelIndex_L(Index(), ma, mobileBankingCustomer, "User is authenticated.", $tags='out')
 RelIndex_R(Index(), mobileBankingCustomer, ma, "User requests transfer of $1,000 from Checking Account to Savings Account", $tags='in')
 RelIndex_R(Index(), ma, apiGateway, "API request to initiate account transfer", "HTTP /POST", $tags="in")
-RelIndex_R(Index(), apiGateway, bankingCore, "Routes HTTP /POST request to update balance in banking core", $tags="in")
-RelIndex_L(Index(), bankingCore, apiGateway, "Returns success message with latest balances", "201 Accepted", $tags="out")
-
-RelIndex_L(Index(), apiGateway, ma, "Return success message with latest balances", "201 Accepted", $tags="out")
 RelIndex_D(Index(), apiGateway, microserviceUpdate, "Routes request to backend microservice", "HTTP /POST", $tags="internal")
+RelIndex_L(Index(), bankingCore, apiGateway, "Returns success message with latest balances", "201 Accepted", $tags="out")
+RelIndex_R(Index(), apiGateway, bankingCore, "Routes HTTP /POST request to update balance in banking core", $tags="in")
 RelIndex_D(Index(), microserviceUpdate,cosmosDb, "Update transaction and balance information", $tags="internal")
+RelIndex_L(Index(), apiGateway, ma, "Return success message with latest balances", "201 Accepted", $tags="out")
 RelIndex_L(Index(), ma, mobileBankingCustomer, "Message showing transfer is complete with latest balences", $tags="out")
 
 SHOW_LEGEND()
